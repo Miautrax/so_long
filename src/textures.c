@@ -6,7 +6,7 @@
 /*   By: vboxuser <vboxuser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 19:45:00 by arivas-q          #+#    #+#             */
-/*   Updated: 2025/10/20 22:41:25 by vboxuser         ###   ########.fr       */
+/*   Updated: 2025/10/21 01:29:48 by vboxuser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,7 @@ static int	load_core_images(t_game *g)
 		return (
 			clear_loaded(g),
 			write(2, "Error\nImage alloc failed\n", 24),
-			0
-		);
+			0);
 	g->sprites.player = load_png_scaled(g->mlx, "textures/Player.png");
 	if (!g->sprites.player)
 		return (

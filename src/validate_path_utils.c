@@ -6,30 +6,30 @@
 /*   By: vboxuser <vboxuser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 18:45:00 by arivas-q          #+#    #+#             */
-/*   Updated: 2025/10/20 22:47:12 by vboxuser         ###   ########.fr       */
+/*   Updated: 2025/10/21 04:18:04 by vboxuser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-char	**copy_map(t_game *g)
+char	**copy_map(t_game *game)
 {
 	int		i;
-	char	**cp;
+	char	**map_copy;
 
-	cp = (char **)malloc(sizeof(char *) * (g->map_height + 1));
-	if (!cp)
+	map_copy = (char **)malloc(sizeof(char *) * (game->map_height + 1));
+	if (!map_copy)
 		return (NULL);
 	i = 0;
-	while (i < g->map_height)
+	while (i < game->map_height)
 	{
-		cp[i] = ft_strdup(g->map[i]);
-		if (!cp[i])
-			return (free_strarray_n(cp, i), NULL);
+		map_copy[i] = ft_strdup(game->map[i]);
+		if (!map_copy[i])
+			return (free_strarray_n(map_copy, i), NULL);
 		i++;
 	}
-	cp[i] = NULL;
-	return (cp);
+	map_copy[i] = NULL;
+	return (map_copy);
 }
 
 static int	open_cell(char c)
@@ -39,51 +39,51 @@ static int	open_cell(char c)
 	return (0);
 }
 
-static int	expand_neighbors(char **cp, int y, int x, int *b)
+static int	expand_neighbors(char **map_copy, int y, int x, int *bounds)
 {
-	int	w;
-	int	h;
-	int	add;
+	int	map_width;
+	int	map_height;
+	int	new_marks;
 
-	w = b[0];
-	h = b[1];
-	add = 0;
-	if (y > 0 && open_cell(cp[y - 1][x]))
-		cp[y - 1][x] = (add++, 'v');
-	if (y + 1 < h && open_cell(cp[y + 1][x]))
-		cp[y + 1][x] = (add++, 'v');
-	if (x > 0 && open_cell(cp[y][x - 1]))
-		cp[y][x - 1] = (add++, 'v');
-	if (x + 1 < w && open_cell(cp[y][x + 1]))
-		cp[y][x + 1] = (add++, 'v');
-	return (add);
+	map_width = bounds[0];
+	map_height = bounds[1];
+	new_marks = 0;
+	if (y > 0 && open_cell(map_copy[y - 1][x]))
+		map_copy[y - 1][x] = (new_marks++, 'V');
+	if (y + 1 < map_height && open_cell(map_copy[y + 1][x]))
+		map_copy[y + 1][x] = (new_marks++, 'V');
+	if (x > 0 && open_cell(map_copy[y][x - 1]))
+		map_copy[y][x - 1] = (new_marks++, 'V');
+	if (x + 1 < map_width && open_cell(map_copy[y][x + 1]))
+		map_copy[y][x + 1] = (new_marks++, 'V');
+	return (new_marks);
 }
 
-int	expand_from(char **cp, int w, int h)
+int	expand_from(char **map_copy, int map_width, int map_height)
 {
 	int	y;
 	int	x;
-	int	chg;
+	int	total_new_marks;
 	int	bounds[2];
-	int	inc;
+	int	new_marks;
 
-	chg = 0;
-	bounds[0] = w;
-	bounds[1] = h;
+	total_new_marks = 0;
+	bounds[0] = map_width;
+	bounds[1] = map_height;
 	y = 0;
-	while (y < h)
+	while (y < map_height)
 	{
 		x = 0;
-		while (x < w)
+		while (x < map_width)
 		{
-			if (cp[y][x] == 'V')
+			if (map_copy[y][x] == 'V')
 			{
-				inc = expand_neighbors(cp, y, x, bounds);
-				chg += inc;
+				new_marks = expand_neighbors(map_copy, y, x, bounds);
+				total_new_marks += new_marks;
 			}
 			x++;
 		}
 		y++;
 	}
-	return (chg);
+	return (total_new_marks);
 }

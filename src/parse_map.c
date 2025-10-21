@@ -6,7 +6,7 @@
 /*   By: vboxuser <vboxuser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 10:54:52 by arivas-q          #+#    #+#             */
-/*   Updated: 2025/10/20 22:14:36 by vboxuser         ###   ########.fr       */
+/*   Updated: 2025/10/21 02:53:42 by vboxuser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ static int	validate_and_prepare(char *file, t_game *game)
 	game->map = malloc(sizeof(char *) * (game->map_height + 1));
 	if (!game->map)
 		return (write(2, "Error\nMalloc failed\n", 20), 0);
+	game->map[0] = NULL;
 	return (1);
 }
 

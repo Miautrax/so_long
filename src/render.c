@@ -6,79 +6,79 @@
 /*   By: vboxuser <vboxuser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 16:30:00 by arivas-q          #+#    #+#             */
-/*   Updated: 2025/10/20 22:19:19 by vboxuser         ###   ########.fr       */
+/*   Updated: 2025/10/21 00:39:07 by vboxuser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "so_long.h"
 
-static int	put_tile(mlx_image_t *img, t_game *g, int x, int y)
+static int	put_tile(mlx_image_t *img, t_game *game, int x, int y)
 {
-	int	px;
-	int	py;
+	int	pixel_x;
+	int	pixel_y;
 
-	px = x * TILE;
-	py = y * TILE;
-	return (mlx_image_to_window(g->mlx, img, px, py));
+	pixel_x = x * TILE;
+	pixel_y = y * TILE;
+	return (mlx_image_to_window(game->mlx, img, pixel_x, pixel_y));
 }
 
-void	render_base(t_game *g)
+void	render_base(t_game *game)
 {
 	int		y;
 	int		x;
 	char	c;
 
 	y = 0;
-	while (y < g->map_height)
+	while (y < game->map_height)
 	{
 		x = 0;
-		while (x < g->map_width)
+		while (x < game->map_width)
 		{
-			c = g->map[y][x];
+			c = game->map[y][x];
 			if (c == '1')
-				put_tile(g->sprites.wall, g, x, y);
+				put_tile(game->sprites.wall, game, x, y);
 			else
-				put_tile(g->sprites.floor, g, x, y);
+				put_tile(game->sprites.floor, game, x, y);
 			x++;
 		}
 		y++;
 	}
 }
 
-void	render_overlays(t_game *g)
+void	render_overlays(t_game *game)
 {
 	int		y;
 	int		x;
 	char	c;
 
 	y = 0;
-	while (y < g->map_height)
+	while (y < game->map_height)
 	{
 		x = 0;
-		while (x < g->map_width)
+		while (x < game->map_width)
 		{
-			c = g->map[y][x];
+			c = game->map[y][x];
 			if (c == 'C')
-				put_tile(g->sprites.collectible, g, x, y);
-			else if (c == 'E' && g->collectibles == 0)
-				put_tile(g->sprites.exit, g, x, y);
+				put_tile(game->sprites.collectible, game, x, y);
+			else if (c == 'E' && game->collectibles == 0)
+				put_tile(game->sprites.exit, game, x, y);
 			x++;
 		}
 		y++;
 	}
 }
 
-void	place_player(t_game *g)
+void	place_player(t_game *game)
 {
-	if (g->sprites.player)
-		g->player_instance = put_tile(g->sprites.player, g,
-				g->player_init.x, g->player_init.y);
+	if (game->sprites.player)
+		game->player_instance = put_tile(game->sprites.player, game,
+				game->player_init.x, game->player_init.y);
 }
 
-int	render_map(t_game *g)
+int	render_map(t_game *game)
 {
-	render_base(g);
-	render_overlays(g);
-	place_player(g);
+	render_base(game);
+	render_overlays(game);
+	place_player(game);
 	return (1);
 }

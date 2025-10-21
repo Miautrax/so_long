@@ -6,7 +6,7 @@
 /*   By: vboxuser <vboxuser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/15 10:27:31 by arivas-q          #+#    #+#             */
-/*   Updated: 2025/10/20 23:36:27 by vboxuser         ###   ########.fr       */
+/*   Updated: 2025/10/21 04:17:26 by vboxuser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdbool.h>
 # include "../libft/ft_printf.h"
 # include "../libft/get_next_line.h"
+# include "../libft/libft.h"
 # include "../MLX42/include/MLX42/MLX42.h"
 
 # define TILE 48
@@ -59,7 +60,7 @@ int			validate_map(t_game *game);
 int			validate_path(t_game *game);
 int			scan_tiles(t_game *g);
 char		**copy_map(t_game *g);
-int			expand_from(char **cp, int w, int h);
+int			expand_from(char **cp, int map_width, int map_height);
 
 /* MLX / Inicialización */
 int			init_mlx(t_game *game);
@@ -76,6 +77,5 @@ void		draw_player(t_game *g);
 /* Memoria */
 void		free_map(char **map);
 void		free_strarray_n(char **arr, int count);
-char		*ft_strdup(const char *s1);
 
 #endif

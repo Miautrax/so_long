@@ -6,7 +6,7 @@
 /*   By: vboxuser <vboxuser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 15:45:00 by arivas-q          #+#    #+#             */
-/*   Updated: 2025/10/20 22:23:21 by vboxuser         ###   ########.fr       */
+/*   Updated: 2025/10/21 01:23:22 by vboxuser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,52 +19,50 @@ static int	is_valid_tile(char c)
 	return (0);
 }
 
-static void	init_counts(t_game *g)
+static void	init_counts(t_game *game)
 {
-	g->collectibles = 0;
-	g->exits = 0;
-	g->player_init.x = -1;
-	g->player_init.y = -1;
+	game->collectibles = 0;
+	game->exits = 0;
+	game->player_init.x = -1;
+	game->player_init.y = -1;
 }
 
-static void	visit_tile(t_game *g, int x, int y)
+static void	visit_tile(t_game *game, int x, int y)
 {
 	char	c;
 
-	c = g->map[y][x];
+	c = game->map[y][x];
 	if (c == 'P')
 	{
-		g->player_init.x = x;
-		g->player_init.y = y;
+		game->player_init.x = x;
+		game->player_init.y = y;
 	}
 	else if (c == 'C')
-		g->collectibles++;
+		game->collectibles++;
 	else if (c == 'E')
-		g->exits++;
+		game->exits++;
 }
 
-static int	scan_area(t_game *g, int *players)
+static int	scan_area(t_game *game, int *players)
 {
 	int		y;
 	int		x;
-	int		w;
 	char	c;
 
-	if (!g)
+	if (!game)
 		return (0);
 	y = 0;
-	w = g->map_width;
-	while (y < g->map_height)
+	while (y < game->map_height)
 	{
 		x = 0;
-		while (x < w)
+		while (x < game->map_width)
 		{
-			c = g->map[y][x];
+			c = game->map[y][x];
 			if (!is_valid_tile(c))
 				return (write(2, "Error\nInvalid char\n", 20), 0);
 			if (c == 'P')
 				(*players)++;
-			visit_tile(g, x, y);
+			visit_tile(game, x, y);
 			x++;
 		}
 		y++;
@@ -72,21 +70,21 @@ static int	scan_area(t_game *g, int *players)
 	return (1);
 }
 
-int	scan_tiles(t_game *g)
+int	scan_tiles(t_game *game)
 {
 	int	players;
 
-	if (!g)
+	if (!game)
 		return (0);
-	init_counts(g);
+	init_counts(game);
 	players = 0;
-	if (!scan_area(g, &players))
+	if (!scan_area(game, &players))
 		return (0);
 	if (players != 1)
 		return (write(2, "Error\nPlayers must be 1\n", 22), 0);
-	if (g->collectibles < 1)
+	if (game->collectibles < 1)
 		return (write(2, "Error\nNo collectibles\n", 22), 0);
-	if (g->exits != 1)
+	if (game->exits != 1)
 		return (write(2, "Error\nExits must be 1\n", 20), 0);
 	return (1);
 }

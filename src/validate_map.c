@@ -6,7 +6,7 @@
 /*   By: vboxuser <vboxuser@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/20 11:15:00 by arivas-q          #+#    #+#             */
-/*   Updated: 2025/10/20 22:44:31 by vboxuser         ###   ########.fr       */
+/*   Updated: 2025/10/21 02:43:01 by vboxuser         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,40 +24,40 @@ static int	line_len(char *s)
 	return (i);
 }
 
-static int	check_rows(t_game *g)
+static int	check_rows(t_game *game)
 {
 	int	i;
-	int	w;
-	int	h;
+	int	map_width;
+	int	map_height;
 	int	len;
 
 	i = 0;
-	w = g->map_width;
-	h = g->map_height;
-	while (i < h)
+	map_width = game->map_width;
+	map_height = game->map_height;
+	while (i < map_height)
 	{
-		len = line_len(g->map[i]);
-		if (len != w)
+		len = line_len(game->map[i]);
+		if (len != map_width)
 			return (write(2, "Error\nNot rectangular\n", 23), 0);
-		if (g->map[i][0] != '1' || g->map[i][w - 1] != '1')
+		if (game->map[i][0] != '1' || game->map[i][map_width - 1] != '1')
 			return (write(2, "Error\nOpen walls\n", 18), 0);
 		i++;
 	}
 	return (1);
 }
 
-static int	check_top_bottom(t_game *g)
+static int	check_top_bottom(t_game *game)
 {
 	int	i;
-	int	w;
-	int	h;
+	int	map_width;
+	int	map_height;
 
 	i = 0;
-	w = g->map_width;
-	h = g->map_height;
-	while (i < w)
+	map_width = game->map_width;
+	map_height = game->map_height;
+	while (i < map_width)
 	{
-		if (g->map[0][i] != '1' || g->map[h - 1][i] != '1')
+		if (game->map[0][i] != '1' || game->map[map_height - 1][i] != '1')
 			return (write(2, "Error\nOpen walls\n", 18), 0);
 		i++;
 	}
